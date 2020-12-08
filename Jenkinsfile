@@ -1,17 +1,26 @@
 pipeline {
-    agent {
-        docker {
-            image 'node:6-alpine'
-            args '-p 3000:3000'
-        }
-    }
+  agent any
     
-    stages {
-        stage('Build') {
-            steps {
-                sh 'npm install'
-            }
-        }
+  tools {nodejs "node12"}
+    
+  stages {
         
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/m0iino/p1prueba.git'
+      }
     }
+        
+    stage('Install dependencies') {
+      steps {
+        sh 'npm install'
+      }
+    }
+     
+    stage('Test') {
+      steps {
+         sh 'npm test'
+      }
+    }      
+  }
 }
